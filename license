@@ -1,0 +1,35 @@
+Custom Proprietary License
+Copyright © [2025] [AINVISIBILITYMEDIA]. All rights reserved.
+
+This software and its source code ("Software") are the proprietary property of [AIN] ("Owner"). By accessing, using, copying, modifying, or contributing to this Software, you agree to the following terms:
+
+1. Ownership
+   All rights, title, and interest in and to this Software, including any modifications, updates, or derivative works, remain solely with the Owner.
+
+2. Restrictions
+<<<<<<< HEAD
+   - You may not use, copy, modify, or distribute this Software in whole or in part without the explicit, prior written permission of the Owner.
+   - Any unauthorized use of this Software is strictly prohibited and may result in legal action.
+
+3. Contributions
+   - Any contributions, including but not limited to code, suggestions, feedback, or other input ("Contributions"), made to this Software become the exclusive property of the Owner upon submission.
+   - Contributors waive all claims to ownership, rights, or compensation for such Contributions.
+=======
+   You may not use, copy, modify, or distribute this Software in whole or in part without the explicit, prior written permission of the Owner.
+   Any unauthorized use of this Software is strictly prohibited and may result in legal action.
+
+3. Contributions
+   Any contributions, including but not limited to code, suggestions, feedback, or other input ("Contributions"), made to this Software become the exclusive property of the Owner upon submission.
+   Contributors waive all claims to ownership, rights, or compensation for such Contributions.
+>>>>>>> e1939283aa421181efdcc43249059e23dd49828d
+
+4. Warranty Disclaimer
+   This Software is provided "as is" without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability or fitness for a particular purpose. The Owner shall not be held liable for any damages resulting from the use of this Software.
+
+5. Termination
+   The Owner reserves the right to terminate access to this Software at any time for any reason.
+
+6. Governing Law
+   This license shall be governed by and construed in accordance with the laws of [Uganda].
+
+For permissions, inquiries, or clarifications, please contact: ainvisibilitymedia@gmail.com
