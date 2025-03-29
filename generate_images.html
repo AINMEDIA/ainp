@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Placeholder Images</title>
+    <style>
+        canvas {
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generate Placeholder Images</h1>
+    <canvas id="placeholderCanvas"></canvas>
+    <button onclick="generatePlaceholder()">Generate Placeholder</button>
+    <script>
+        function generatePlaceholder() {
+            const canvas = document.getElementById('placeholderCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 300;
+            canvas.height = 200;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.rect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.rect(10, 10, 280, 180);
+            ctx.strokeStyle = '#ccc';
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html> 

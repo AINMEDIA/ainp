@@ -1,57 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Contact AIN Visibility Media</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+    <title>Contact Us - AIN Visibility Media</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div id="background">
-        <img src="images/absolute-img.jpg" alt="AIN Media" class="abs-img" />
-        <div class="page">
-            <div class="sidebar">
-                <div class="featured">
-                    <h3>Our Location</h3>
-                    <p>Visit us at our offices for consultations and inquiries.</p>
-                </div>
-                <div id="tweets">
-                    <h3>Stay Connected</h3>
-                    <p>Follow us on social media for the latest updates and insights.</p>
-                </div>
-                <div id="connect">
-                    <h2>Contact Us</h2>
-                    <p>Phone: 0782 521524 | 0701 521524</p>
-                    <p>Email: <a href="mailto:info@ainvisibilitymedia.com">info@ainvisibilitymedia.com</a></p>
-                    <p>Address: Plot 27 Nasser Road, Zebra House RM. A12, Kampala</p>
-                    <p>Website: <a href="http://ainvisibilitymedia.com">ainvisibilitymedia.com</a></p>
-                </div>
-                <p>&#169; 2025 AIN Visibility Media. All Rights Reserved.</p>
-            </div>
-            <div class="body">
-                <ul id="navigation">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li class="selected"><a href="contact.html">Contact</a></li>
+    <header class="main-header">
+        <div class="header-container">
+            <a href="home.html" class="logo">
+                <img src="images/logo.png" alt="AIN Visibility Media Logo">
+            </a>
+            <nav class="main-nav">
+                <button class="menu-toggle" aria-label="Toggle hamburger navigation" title="Toggle hamburger navigation">
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="portfolio.html">Portfolio</a></li>
+                    <li><a href="contact.html" class="selected">Contact</a></li>
                 </ul>
-                <h1>Get in Touch</h1>
-                <div class="contact">
-                    <p>We'd love to hear from you! Fill out the form below to send us a message.</p>
-                    <form action="#" method="post">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required>
-                        
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                        
-                        <label for="message">Message:</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                        
-                        <input type="submit" value="Send Message">
-                    </form>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page">
+        <div class="body">
+            <div class="contact">
+                <h1>Contact Us</h1>
+                
+                <form id="contactForm" onsubmit="sendWhatsAppMessage(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fab fa-whatsapp"></i>
+                        Send via WhatsApp
+                    </button>
+                </form>
+
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Location</h3>
+                        <p>Kampala, Uganda</p>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>+256 701 521 524</p>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>info@ainvisibilitymedia.com</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function sendWhatsAppMessage(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+            
+            // Format the message
+            const formattedMessage = `*New Contact Form Submission*\n\n` +
+                `*Name:* ${name}\n` +
+                `*Email:* ${email}\n` +
+                `*Phone:* ${phone}\n\n` +
+                `*Message:*\n${message}`;
+            
+            // Encode the message for URL
+            const encodedMessage = encodeURIComponent(formattedMessage);
+            
+            // Create WhatsApp URL
+            const whatsappUrl = `https://wa.me/256701521524?text=${encodedMessage}`;
+            
+            // Open WhatsApp in a new tab
+            window.open(whatsappUrl, '_blank');
+            
+            // Reset the form
+            event.target.reset();
+        }
+    </script>
 </body>
 </html>

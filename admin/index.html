@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AIN Visibility Media - Admin Panel</title>
+    <link rel="stylesheet" href="css/admin.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar">
+            <div class="admin-logo">
+                <img src="../images/logo.jpg" alt="AIN Media Logo">
+                <h2>Admin Panel</h2>
+            </div>
+            <ul class="admin-menu">
+                <li class="active">
+                    <a href="#dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#content"><i class="fas fa-edit"></i> Content</a>
+                </li>
+                <li>
+                    <a href="#portfolio"><i class="fas fa-images"></i> Portfolio</a>
+                </li>
+                <li>
+                    <a href="#services"><i class="fas fa-cogs"></i> Services</a>
+                </li>
+                <li>
+                    <a href="#messages"><i class="fas fa-envelope"></i> Messages</a>
+                </li>
+                <li>
+                    <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <div class="header-search">
+                    <input type="text" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="header-user">
+                    <span class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </span>
+                    <div class="user-profile">
+                        <img src="../images/admin-avatar.jpg" alt="Admin">
+                        <span>Admin User</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="admin-content">
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-envelope"></i>
+                        <div class="stat-info">
+                            <h3>New Messages</h3>
+                            <p>12</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-images"></i>
+                        <div class="stat-info">
+                            <h3>Portfolio Items</h3>
+                            <p>24</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-cogs"></i>
+                        <div class="stat-info">
+                            <h3>Services</h3>
+                            <p>8</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-info">
+                            <h3>Visitors</h3>
+                            <p>1,234</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Messages -->
+                <div class="recent-messages">
+                    <h2>Recent Messages</h2>
+                    <div class="message-list">
+                        <div class="message-item">
+                            <div class="message-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="message-content">
+                                <h4>John Doe</h4>
+                                <p>Interested in photography services...</p>
+                            </div>
+                            <div class="message-time">
+                                <span>2 hours ago</span>
+                            </div>
+                        </div>
+                        <!-- More message items -->
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="action-buttons">
+                        <button class="action-btn">
+                            <i class="fas fa-plus"></i>
+                            Add Portfolio Item
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-edit"></i>
+                            Edit Home Page
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-cog"></i>
+                            Update Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="text/javascript" src="js/admin.js"></script>
+</body>
+</html>

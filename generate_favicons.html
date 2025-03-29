@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Favicons</title>
+    <style>
+        canvas {
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="favicon16" width="16" height="16"></canvas>
+    <canvas id="favicon32" width="32" height="32"></canvas>
+    <canvas id="favicon180" width="180" height="180"></canvas>
+    <canvas id="favicon192" width="192" height="192"></canvas>
+    <canvas id="favicon512" width="512" height="512"></canvas>
+    <script>
+        function generateFavicon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Fill background
+            ctx.fillStyle = '#8B0000';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Add text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.6}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('A', size/2, size/2);
+            
+            // Save as PNG
+            const link = document.createElement('a');
+            link.download = `favicon-${size}x${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Generate all sizes
+        generateFavicon('favicon16', 16);
+        generateFavicon('favicon32', 32);
+        generateFavicon('favicon180', 180);
+        generateFavicon('favicon192', 192);
+        generateFavicon('favicon512', 512);
+        
+        // Also save the 180x180 as apple-touch-icon.png
+        const appleCanvas = document.getElementById('favicon180');
+        const appleLink = document.createElement('a');
+        appleLink.download = 'apple-touch-icon.png';
+        appleLink.href = appleCanvas.toDataURL('image/png');
+        appleLink.click();
+        
+        // Save the 192x192 as android-chrome-192x192.png
+        const android192Canvas = document.getElementById('favicon192');
+        const android192Link = document.createElement('a');
+        android192Link.download = 'android-chrome-192x192.png';
+        android192Link.href = android192Canvas.toDataURL('image/png');
+        android192Link.click();
+        
+        // Save the 512x512 as android-chrome-512x512.png
+        const android512Canvas = document.getElementById('favicon512');
+        const android512Link = document.createElement('a');
+        android512Link.download = 'android-chrome-512x512.png';
+        android512Link.href = android512Canvas.toDataURL('image/png');
+        android512Link.click();
+    </script>
+</body>
+</html> 

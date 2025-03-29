@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Placeholder Video</title>
+    <style>
+        canvas {
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="videoCanvas" width="1920" height="1080"></canvas>
+    <script>
+        const canvas = document.getElementById('videoCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Create a MediaRecorder
+        const stream = canvas.captureStream(30);
+        const mediaRecorder = new MediaRecorder(stream, {
+            mimeType: 'video/webm;codecs=vp9'
+        });
+        
+        const chunks = [];
+        mediaRecorder.ondataavailable = e => chunks.push(e.data);
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(chunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hero.webm';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+        
+        // Start recording
+        mediaRecorder.start();
+        
+        // Animate for 5 seconds
+        let startTime = Date.now();
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            
+            // Fill background
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add text
+            ctx.fillStyle = '#fff';
+            ctx.font = '48px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('AIN Visibility Media', canvas.width/2, canvas.height/2);
+            
+            if (elapsed < 5000) {
+                requestAnimationFrame(animate);
+            } else {
+                mediaRecorder.stop();
+            }
+        }
+        
+        animate();
+    </script>
+</body>
+</html> 
