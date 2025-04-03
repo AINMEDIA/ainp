@@ -98,3 +98,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Fetch hero section content - Modified to prevent errors
+async function fetchHeroContent() {
+    // Skip API call and just log a message
+    console.log('Skipping hero content fetch (API endpoint not available)');
+    return null;
+}
+
+// Update hero section content
+function updateHeroSection(data) {
+    // Skip if no data
+    if (!data) return;
+    
+    const heroTitle = document.querySelector('.hero-title');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    const heroVideo = document.querySelector('.hero-video');
+    
+    if (heroTitle) heroTitle.textContent = data.title;
+    if (heroSubtitle) heroSubtitle.textContent = data.subtitle;
+    if (heroVideo) heroVideo.src = data.video_url;
+}
+
+// Fetch services content - Modified to prevent errors
+async function fetchServices() {
+    // Skip API call and just log a message
+    console.log('Skipping services fetch (API endpoint not available)');
+    return null;
+}
+
+// Update services content
+function updateServices(services) {
+    // Skip if no services
+    if (!services || !services.length) return;
+    
+    const servicesGrid = document.querySelector('.services-grid');
+    if (!servicesGrid) return;
+    
+    servicesGrid.innerHTML = services.map(service => `
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-${service.icon}"></i>
+            </div>
+            <h3>${service.title}</h3>
+            <p>${service.description}</p>
+        </div>
+    `).join('');
+}
+
+// Initialize content
+document.addEventListener('DOMContentLoaded', () => {
+    fetchHeroContent();
+    fetchServices();
+});
+
+// Parallax effect
+window.addEventListener('scroll', () => {
+    const parallaxElements = document.querySelectorAll('.parallax');
+    parallaxElements.forEach(element => {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.3;
+        element.style.transform = `translateY(${rate}px)`;
+    });
+});

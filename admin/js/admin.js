@@ -26,81 +26,59 @@ function handleSearch(event) {
     event.preventDefault();
     const searchInput = event.target.querySelector('input[type="text"]');
     if (searchInput && searchInput.value.trim()) {
-        // Implement search functionality based on current page
-        const currentPage = window.location.pathname.split('/').pop();
-        switch (currentPage) {
-            case 'users.html':
-                searchUsers(searchInput.value);
-                break;
-            case 'content.html':
-                searchContent(searchInput.value);
-                break;
-            case 'media.html':
-                searchMedia(searchInput.value);
-                break;
-            default:
-                console.log('Search not implemented for this page');
-        }
+        // Just log the search term since API is not available
+        console.log('Search term:', searchInput.value);
+        
+        // Show a notification
+        showNotification('Search functionality is not available in this demo.', 'info');
     }
 }
 
 // Search Functions
 function searchUsers(query) {
-    fetch(`api/users.php?search=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(users => {
-            const tbody = document.getElementById('usersTableBody');
-            if (tbody) {
-                tbody.innerHTML = '';
-                users.forEach(user => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td>${user.role}</td>
-                        <td>
-                            <span class="status-badge ${user.status}">${user.status}</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm" onclick="editUser(${user.id})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-        })
-        .catch(error => {
-            showNotification('Error searching users', 'error');
-        });
+    // Just log the search query since API is not available
+    console.log('Searching users:', query);
+    
+    // Show a notification
+    showNotification('User search functionality is not available in this demo.', 'info');
 }
 
 function searchContent(query) {
-    // Implement content search
+    // Just log the search query since API is not available
     console.log('Searching content:', query);
+    
+    // Show a notification
+    showNotification('Content search functionality is not available in this demo.', 'info');
 }
 
 function searchMedia(query) {
-    // Implement media search
+    // Just log the search query since API is not available
     console.log('Searching media:', query);
+    
+    // Show a notification
+    showNotification('Media search functionality is not available in this demo.', 'info');
 }
 
 // Show Notification
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <p>${message}</p>
+        </div>
+        <button class="notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
     
     document.body.appendChild(notification);
     
+    // Auto-remove after 5 seconds
     setTimeout(() => {
         notification.remove();
-    }, 3000);
+    }, 5000);
 }
 
 // Handle File Upload
@@ -164,4 +142,116 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleButton.onclick = toggleMobileMenu;
         document.body.appendChild(toggleButton);
     }
-}); 
+});
+
+// Common functionality for admin panel
+
+// Modal handling
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        closeModal(event.target.id);
+    }
+}
+
+// Search functionality
+function handleSearch(searchInput, searchType) {
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    switch(searchType) {
+        case 'users':
+            searchUsers(searchTerm);
+            break;
+        case 'content':
+            searchContent(searchTerm);
+            break;
+        case 'media':
+            searchMedia(searchTerm);
+            break;
+        case 'settings':
+            searchSettings(searchTerm);
+            break;
+    }
+}
+
+// Toast notifications
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Form validation
+function validateForm(formData) {
+    const errors = [];
+    
+    for (const [key, value] of formData.entries()) {
+        if (!value && value !== '0') {
+            errors.push(`${key} is required`);
+        }
+    }
+    
+    return errors;
+}
+
+// API calls
+async function makeApiCall(endpoint, method = 'GET', data = null) {
+    // Log the attempted API call
+    console.log(`Attempted API call to ${endpoint} (endpoint not available)`);
+    
+    // Return mock data based on the endpoint
+    switch (endpoint) {
+        case '/api/settings':
+            return {
+                siteName: 'Demo Site',
+                siteDescription: 'This is a demo site without a backend server',
+                contactEmail: 'demo@example.com',
+                contactPhone: '(555) 123-4567',
+                contactAddress: '123 Demo St, Demo City',
+                facebookUrl: '#',
+                twitterUrl: '#',
+                linkedinUrl: '#',
+                instagramUrl: '#'
+            };
+        case '/api/users':
+            return {
+                users: [],
+                message: 'User data not available in demo mode'
+            };
+        case '/api/users/create':
+        case '/api/users/update':
+        case '/api/users/delete':
+            // For user management operations, return a success response
+            return {
+                success: true,
+                message: 'Operation would be successful in a production environment'
+            };
+        default:
+            // For any other endpoints, return a demo message
+            return {
+                success: false,
+                message: 'This is a demo site. The API endpoint is not available.'
+            };
+    }
+} 

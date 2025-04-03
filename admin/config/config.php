@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'ain_media');
+define('DB_NAME', 'ainp_db');
 
 // Site configuration
 define('SITE_URL', 'http://localhost:8080');

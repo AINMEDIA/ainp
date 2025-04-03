@@ -3,51 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="User Management - AIN VISIBILITY MEDIA">
     <title>User Management - AIN VISIBILITY MEDIA</title>
-    <link rel="stylesheet" href="css/admin.css">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="../images/icons/favicon.ico">
+    <link rel="manifest" href="../images/icons/site.webmanifest">
+    
+    <link rel="stylesheet" href="css/admin.css?v=1.0.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="admin-container">
         <nav class="sidebar">
             <div class="sidebar-header">
+                <img src="../images/camera.jpg" alt="AIN VISIBILITY MEDIA" class="logo">
                 <h2>AIN VISIBILITY MEDIA</h2>
             </div>
             <ul class="nav-links">
                 <li>
                     <a href="dashboard.html">
                         <i class="fas fa-home"></i>
-                        Dashboard
+                        <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="active">
                     <a href="users.html">
                         <i class="fas fa-users"></i>
-                        Users
+                        <span>Users</span>
                     </a>
                 </li>
                 <li>
                     <a href="content.html">
                         <i class="fas fa-file-alt"></i>
-                        Content
+                        <span>Content</span>
                     </a>
                 </li>
                 <li>
                     <a href="media.html">
                         <i class="fas fa-images"></i>
-                        Media
+                        <span>Media</span>
                     </a>
                 </li>
                 <li>
                     <a href="settings.html">
                         <i class="fas fa-cog"></i>
-                        Settings
+                        <span>Settings</span>
                     </a>
                 </li>
                 <li>
                     <a href="#" onclick="handleLogout()">
                         <i class="fas fa-sign-out-alt"></i>
-                        Logout
+                        <span>Logout</span>
                     </a>
                 </li>
             </ul>
@@ -59,46 +69,57 @@
                     <i class="fas fa-search"></i>
                 </div>
                 <div class="user-info">
-                    <span>Welcome, Admin</span>
-                    <img src="images/admin-avatar.png" alt="Admin Avatar">
+                    <div class="user-details">
+                        <span class="user-name">Welcome, Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <img src="images/admin-avatar.svg" alt="Admin Avatar">
                 </div>
             </header>
-            <div class="content-wrapper">
-                <div class="content-header">
+
+            <div class="dashboard-wrapper">
+                <div class="welcome-section">
                     <h1>User Management</h1>
-                    <button class="btn btn-primary" onclick="showAddUserModal()">
-                        <i class="fas fa-plus"></i> Add New User
-                    </button>
+                    <p>Manage your website users and their permissions.</p>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <!-- Users will be loaded dynamically -->
-                        </tbody>
-                    </table>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Users List</h2>
+                        <button class="btn-primary" onclick="showAddUserModal()">
+                            <i class="fas fa-plus"></i> Add New User
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will be dynamically populated here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Add/Edit User Modal -->
-    <div id="userModal" class="modal">
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Add New User</h2>
-                <button class="close-modal" onclick="closeModal()">&times;</button>
+                <h2>Add New User</h2>
+                <button class="close-btn" onclick="closeModal('addUserModal')">&times;</button>
             </div>
-            <form id="userForm" onsubmit="handleUserSubmit(event)">
+            <form id="addUserForm" onsubmit="handleAddUser(event)">
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <input type="text" id="name" name="name" required>
@@ -110,26 +131,18 @@
                 <div class="form-group">
                     <label for="role">Role</label>
                     <select id="role" name="role" required>
-                        <option value="admin">Admin</option>
+                        <option value="admin">Administrator</option>
                         <option value="editor">Editor</option>
                         <option value="user">User</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="status">Status</label>
-                    <select id="status" name="status" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password">
-                    <small>Leave blank to keep current password when editing</small>
+                    <input type="password" id="password" name="password" required>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save User</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add User</button>
                 </div>
             </form>
         </div>
@@ -147,11 +160,6 @@
             localStorage.removeItem('adminLoggedIn');
             window.location.href = 'login.html';
         }
-
-        // Load users when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUsers();
-        });
     </script>
 </body>
 </html> 

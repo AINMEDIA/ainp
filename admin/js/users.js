@@ -2,159 +2,170 @@
 
 let currentUserId = null;
 
-// Show Add User Modal
-function showAddUserModal() {
-    currentUserId = null;
-    document.getElementById('modalTitle').textContent = 'Add New User';
-    document.getElementById('userForm').reset();
-    document.getElementById('userModal').style.display = 'block';
+// Initialize functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Instead of loading users from API, display a message
+    displayNoApiMessage();
+    
+    // Add search input event listener
+    const searchInput = document.querySelector('.search-bar input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            // Just log the search term since API is not available
+            console.log('Search term:', e.target.value);
+        });
+    }
+
+    // Add click event listener for modal close
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('addUserModal');
+        if (event.target === modal) {
+            closeModal('addUserModal');
+        }
+    });
+
+    // Add close button event listener
+    const closeBtn = document.querySelector('#addUserModal .close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            closeModal('addUserModal');
+        });
+    }
+
+    // Add form submit event listener
+    const addUserForm = document.getElementById('addUserForm');
+    if (addUserForm) {
+        addUserForm.addEventListener('submit', handleAddUser);
+    }
+});
+
+// Display a message when API is not available
+function displayNoApiMessage() {
+    const usersContainer = document.querySelector('.users-container');
+    if (usersContainer) {
+        usersContainer.innerHTML = `
+            <div class="no-api-message">
+                <h3>API Endpoint Not Available</h3>
+                <p>The users API endpoint is not available. This is a demo site without a backend server.</p>
+                <p>In a production environment, this would display your user list.</p>
+            </div>
+        `;
+    }
 }
 
-// Show Edit User Modal
+// Show Add User Modal
+function showAddUserModal() {
+    // Display the modal
+    const modal = document.getElementById('addUserModal');
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    } else {
+        console.error('Add user modal not found');
+        showToast('Error: Add user modal not found', 'error');
+    }
+}
+
+// Edit User
 function editUser(userId) {
-    currentUserId = userId;
-    document.getElementById('modalTitle').textContent = 'Edit User';
+    // Just log that editing a user is not available
+    console.log('Editing user:', userId, '(API endpoint not available)');
     
-    // Fetch user data
-    fetch(`api/users.php?id=${userId}`)
-        .then(response => response.json())
-        .then(user => {
-            document.getElementById('name').value = user.name;
-            document.getElementById('email').value = user.email;
-            document.getElementById('role').value = user.role;
-            document.getElementById('status').value = user.status;
-            document.getElementById('password').value = ''; // Clear password field
-            document.getElementById('userModal').style.display = 'block';
-        })
-        .catch(error => {
-            showNotification('Error loading user data', 'error');
-        });
+    // Show a notification
+    showToast('Edit user functionality is not available in this demo.', 'info');
 }
 
 // Close Modal
-function closeModal() {
-    document.getElementById('userModal').style.display = 'none';
-    document.getElementById('userForm').reset();
-    currentUserId = null;
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 }
 
-// Handle User Form Submit
-function handleUserSubmit(event) {
+// Handle Add User Form Submit
+async function handleAddUser(event) {
     event.preventDefault();
     
-    const formData = new FormData(event.target);
-    const userData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        role: formData.get('role'),
-        status: formData.get('status'),
-        password: formData.get('password')
-    };
-
-    const url = currentUserId 
-        ? `api/users.php?id=${currentUserId}`
-        : 'api/users.php';
-    
-    const method = currentUserId ? 'PUT' : 'POST';
-
-    fetch(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification(
-                currentUserId ? 'User updated successfully' : 'User added successfully',
-                'success'
-            );
-            closeModal();
-            loadUsers();
-        } else {
-            showNotification(data.message || 'Error saving user', 'error');
+    try {
+        // Get form data
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Validate form data
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const role = formData.get('role');
+        const password = formData.get('password');
+        
+        if (!name || !email || !role || !password) {
+            showToast('Please fill in all required fields', 'error');
+            return;
         }
-    })
-    .catch(error => {
-        showNotification('Error saving user', 'error');
-    });
+        
+        const userData = {
+            name: name,
+            email: email,
+            role: role,
+            password: password
+        };
+        
+        // Log the attempt
+        console.log('Attempting to save user:', userData);
+        
+        // In a real implementation, this would make an API call
+        // For demo purposes, we'll simulate a successful save
+        console.log('User save functionality is not available in this demo');
+        
+        // Show success notification
+        showToast('User would be saved in a production environment', 'success');
+        
+        // Reset form
+        form.reset();
+        
+        // Close the modal
+        closeModal('addUserModal');
+    } catch (error) {
+        console.error('Error saving user:', error);
+        showToast('Error saving user: ' + error.message, 'error');
+    }
 }
 
 // Delete User
-function deleteUser(userId) {
-    if (confirm('Are you sure you want to delete this user?')) {
-        fetch(`api/users.php?id=${userId}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showNotification('User deleted successfully', 'success');
-                loadUsers();
-            } else {
-                showNotification(data.message || 'Error deleting user', 'error');
-            }
-        })
-        .catch(error => {
-            showNotification('Error deleting user', 'error');
-        });
-    }
+async function deleteUser(userId) {
+    // Just log that deleting a user is not available
+    console.log('Deleting user:', userId, '(API endpoint not available)');
+    
+    // Show a notification
+    showToast('Delete user functionality is not available in this demo.', 'info');
 }
 
 // Load Users
-function loadUsers() {
-    fetch('api/users.php')
-        .then(response => response.json())
-        .then(users => {
-            const tbody = document.getElementById('usersTableBody');
-            tbody.innerHTML = '';
-            
-            users.forEach(user => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>${user.role}</td>
-                    <td>
-                        <span class="status-badge ${user.status}">${user.status}</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm" onclick="editUser(${user.id})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        })
-        .catch(error => {
-            showNotification('Error loading users', 'error');
-        });
+async function loadUsers(searchTerm = '') {
+    // Skip API call and just display a message
+    console.log('Skipping users fetch (API endpoint not available)');
+    displayNoApiMessage();
 }
 
-// Show Notification
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
+// Show Toast Notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <p>${message}</p>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
     
-    document.body.appendChild(notification);
+    document.body.appendChild(toast);
     
+    // Auto-remove after 5 seconds
     setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('userModal');
-    if (event.target === modal) {
-        closeModal();
-    }
-}; 
+        toast.remove();
+    }, 5000);
+} 

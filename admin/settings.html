@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Settings - AIN VISIBILITY MEDIA">
+    <title>Settings - AIN VISIBILITY MEDIA</title>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="../images/icons/favicon.ico">
+    <link rel="manifest" href="../images/icons/site.webmanifest">
+    
+    <link rel="stylesheet" href="css/admin.css?v=1.0.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/ainmedia1.png" alt="AINP Logo" class="logo" id="sidebarLogo">
+                <h2>AIN VISIBILITY MEDIA</h2>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="dashboard.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="users.html">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="content.html">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Content</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="media.html">
+                        <i class="fas fa-images"></i>
+                        <span>Media</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="settings.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="handleLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search settings...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-details">
+                        <span class="user-name">Welcome, Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <img src="../images/ainmedia1.png" alt="User Avatar" class="user-avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-wrapper">
+                <div class="welcome-section">
+                    <h1>Site Settings</h1>
+                    <p>Configure your website settings and preferences.</p>
+                </div>
+
+                <div class="settings-grid">
+                    <!-- General Settings -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>General Settings</h2>
+                        </div>
+                        <form id="generalSettingsForm">
+                            <div class="form-group">
+                                <label for="siteName">Site Name</label>
+                                <input type="text" id="siteName" name="site_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="siteDescription">Site Description</label>
+                                <textarea id="siteDescription" name="site_description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="siteLogo">Site Logo</label>
+                                <div class="logo-preview">
+                                    <img src="../images/ainmedia1.png" alt="Current Logo" id="logoPreview">
+                                    <input type="hidden" name="site_logo" value="ainmedia1.png">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save General Settings</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Contact Settings -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Contact Settings</h2>
+                        </div>
+                        <form id="contactSettingsForm">
+                            <div class="form-group">
+                                <label for="siteEmail">Contact Email</label>
+                                <input type="email" id="siteEmail" name="site_email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sitePhone">Contact Phone</label>
+                                <input type="tel" id="sitePhone" name="site_phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="siteAddress">Contact Address</label>
+                                <textarea id="siteAddress" name="site_address" rows="3"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save Contact Settings</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Social Media Settings -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Social Media Settings</h2>
+                        </div>
+                        <form id="socialSettingsForm" onsubmit="handleSocialSettingsSubmit(event)">
+                            <div class="form-group">
+                                <label for="facebookUrl">Facebook URL</label>
+                                <input type="url" id="facebookUrl" name="facebookUrl">
+                            </div>
+                            <div class="form-group">
+                                <label for="twitterUrl">Twitter URL</label>
+                                <input type="url" id="twitterUrl" name="twitterUrl">
+                            </div>
+                            <div class="form-group">
+                                <label for="linkedinUrl">LinkedIn URL</label>
+                                <input type="url" id="linkedinUrl" name="linkedinUrl">
+                            </div>
+                            <div class="form-group">
+                                <label for="instagramUrl">Instagram URL</label>
+                                <input type="url" id="instagramUrl" name="instagramUrl">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save Social Settings</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Security Settings</h2>
+                        </div>
+                        <form id="securitySettingsForm" onsubmit="handleSecuritySettingsSubmit(event)">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" name="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" name="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Change Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script src="js/settings.js"></script>
+    <script>
+        // Check if user is logged in
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html> 

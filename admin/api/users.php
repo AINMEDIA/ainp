@@ -1,194 +1,174 @@
 <?php
+// Include database configuration
+require_once 'config.php';
+
+// Set headers for API
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-// Database configuration
-$db_config = [
-    'host' => 'localhost',
-    'dbname' => 'ainp_db',
-    'username' => 'root',
-    'password' => ''
-];
-
-try {
-    $pdo = new PDO(
-        "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset=utf8mb4",
-        $db_config['username'],
-        $db_config['password'],
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-        ]
-    );
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
     exit;
 }
 
-// Handle different HTTP methods
+// Get database connection
+$conn = getDbConnection();
+if (!$conn) {
+    sendJsonResponse(['success' => false, 'message' => 'Database connection failed'], 500);
+}
+
+// Get request method
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Handle different request methods
 switch ($method) {
     case 'GET':
-        if (isset($_GET['id'])) {
-            // Get single user
-            $stmt = $pdo->prepare('SELECT id, name, email, role, status FROM users WHERE id = ?');
-            $stmt->execute([$_GET['id']]);
-            $user = $stmt->fetch();
-            
-            if ($user) {
-                echo json_encode($user);
+        // Get all users or search users
+        $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+        
+        try {
+            if (!empty($searchTerm)) {
+                $stmt = $conn->prepare("SELECT id, name, email, role, status, created_at FROM users WHERE name LIKE :search OR email LIKE :search");
+                $searchTerm = "%$searchTerm%";
+                $stmt->bindParam(':search', $searchTerm);
             } else {
-                http_response_code(404);
-                echo json_encode(['success' => false, 'message' => 'User not found']);
-            }
-        } else {
-            // Get all users
-            $search = isset($_GET['search']) ? $_GET['search'] : '';
-            $query = 'SELECT id, name, email, role, status FROM users';
-            
-            if ($search) {
-                $query .= ' WHERE name LIKE ? OR email LIKE ?';
-                $search = "%$search%";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute([$search, $search]);
-            } else {
-                $stmt = $pdo->query($query);
+                $stmt = $conn->prepare("SELECT id, name, email, role, status, created_at FROM users");
             }
             
-            $users = $stmt->fetchAll();
-            echo json_encode($users);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            sendJsonResponse(['success' => true, 'users' => $users]);
+        } catch (PDOException $e) {
+            sendJsonResponse(['success' => false, 'message' => 'Error fetching users: ' . $e->getMessage()], 500);
         }
         break;
-
+        
     case 'POST':
-        // Create new user
-        $data = json_decode(file_get_contents('php://input'), true);
+        // Create a new user
+        $data = getJsonRequestBody();
         
         // Validate required fields
-        if (!isset($data['name']) || !isset($data['email']) || !isset($data['password'])) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Missing required fields']);
-            exit;
+        if (!isset($data['name']) || !isset($data['email']) || !isset($data['role']) || !isset($data['password'])) {
+            sendJsonResponse(['success' => false, 'message' => 'Missing required fields'], 400);
         }
-
-        // Check if email already exists
-        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
-        $stmt->execute([$data['email']]);
-        if ($stmt->fetch()) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Email already exists']);
-            exit;
-        }
-
-        // Hash password
-        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-
-        // Insert new user
-        $stmt = $pdo->prepare('
-            INSERT INTO users (name, email, password, role, status)
-            VALUES (?, ?, ?, ?, ?)
-        ');
         
         try {
-            $stmt->execute([
-                $data['name'],
-                $data['email'],
-                $hashedPassword,
-                $data['role'] ?? 'user',
-                $data['status'] ?? 'active'
-            ]);
+            // Check if email already exists
+            $stmt = $conn->prepare("SELECT id FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $data['email']);
+            $stmt->execute();
             
-            $userId = $pdo->lastInsertId();
-            echo json_encode([
-                'success' => true,
-                'message' => 'User created successfully',
-                'id' => $userId
-            ]);
+            if ($stmt->rowCount() > 0) {
+                sendJsonResponse(['success' => false, 'message' => 'Email already exists'], 400);
+            }
+            
+            // Hash password
+            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+            
+            // Insert new user
+            $stmt = $conn->prepare("INSERT INTO users (name, email, role, password, status, created_at) VALUES (:name, :email, :role, :password, :status, NOW())");
+            $stmt->bindParam(':name', $data['name']);
+            $stmt->bindParam(':email', $data['email']);
+            $stmt->bindParam(':role', $data['role']);
+            $stmt->bindParam(':password', $hashedPassword);
+            
+            // Set default status
+            $status = 'active';
+            $stmt->bindParam(':status', $status);
+            
+            $stmt->execute();
+            
+            // Get the new user ID
+            $userId = $conn->lastInsertId();
+            
+            sendJsonResponse(['success' => true, 'message' => 'User created successfully', 'userId' => $userId]);
         } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Error creating user']);
+            sendJsonResponse(['success' => false, 'message' => 'Error creating user: ' . $e->getMessage()], 500);
         }
         break;
-
+        
     case 'PUT':
-        // Update user
-        $data = json_decode(file_get_contents('php://input'), true);
-        $userId = $_GET['id'] ?? null;
-
-        if (!$userId) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'User ID is required']);
-            exit;
-        }
-
+        // Update an existing user
+        $data = getJsonRequestBody();
+        
         // Validate required fields
-        if (!isset($data['name']) || !isset($data['email'])) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Missing required fields']);
-            exit;
+        if (!isset($data['id'])) {
+            sendJsonResponse(['success' => false, 'message' => 'User ID is required'], 400);
         }
-
-        // Check if email exists for other users
-        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND id != ?');
-        $stmt->execute([$data['email'], $userId]);
-        if ($stmt->fetch()) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Email already exists']);
-            exit;
-        }
-
-        // Prepare update query
-        $query = 'UPDATE users SET name = ?, email = ?, role = ?, status = ?';
-        $params = [$data['name'], $data['email'], $data['role'], $data['status']];
-
-        // Update password if provided
-        if (!empty($data['password'])) {
-            $query .= ', password = ?';
-            $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
-        }
-
-        $query .= ' WHERE id = ?';
-        $params[] = $userId;
-
-        $stmt = $pdo->prepare($query);
-
+        
         try {
+            // Build update query dynamically based on provided fields
+            $updateFields = [];
+            $params = [];
+            
+            if (isset($data['name'])) {
+                $updateFields[] = "name = :name";
+                $params[':name'] = $data['name'];
+            }
+            
+            if (isset($data['email'])) {
+                $updateFields[] = "email = :email";
+                $params[':email'] = $data['email'];
+            }
+            
+            if (isset($data['role'])) {
+                $updateFields[] = "role = :role";
+                $params[':role'] = $data['role'];
+            }
+            
+            if (isset($data['password'])) {
+                $updateFields[] = "password = :password";
+                $params[':password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            }
+            
+            if (isset($data['status'])) {
+                $updateFields[] = "status = :status";
+                $params[':status'] = $data['status'];
+            }
+            
+            if (empty($updateFields)) {
+                sendJsonResponse(['success' => false, 'message' => 'No fields to update'], 400);
+            }
+            
+            // Add ID to params
+            $params[':id'] = $data['id'];
+            
+            // Build and execute query
+            $query = "UPDATE users SET " . implode(', ', $updateFields) . " WHERE id = :id";
+            $stmt = $conn->prepare($query);
             $stmt->execute($params);
-            echo json_encode(['success' => true, 'message' => 'User updated successfully']);
+            
+            sendJsonResponse(['success' => true, 'message' => 'User updated successfully']);
         } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Error updating user']);
+            sendJsonResponse(['success' => false, 'message' => 'Error updating user: ' . $e->getMessage()], 500);
         }
         break;
-
+        
     case 'DELETE':
-        // Delete user
-        $userId = $_GET['id'] ?? null;
-
+        // Delete a user
+        $userId = isset($_GET['id']) ? $_GET['id'] : null;
+        
         if (!$userId) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'User ID is required']);
-            exit;
+            sendJsonResponse(['success' => false, 'message' => 'User ID is required'], 400);
         }
-
-        $stmt = $pdo->prepare('DELETE FROM users WHERE id = ?');
-
+        
         try {
-            $stmt->execute([$userId]);
-            echo json_encode(['success' => true, 'message' => 'User deleted successfully']);
+            $stmt = $conn->prepare("DELETE FROM users WHERE id = :id");
+            $stmt->bindParam(':id', $userId);
+            $stmt->execute();
+            
+            sendJsonResponse(['success' => true, 'message' => 'User deleted successfully']);
         } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Error deleting user']);
+            sendJsonResponse(['success' => false, 'message' => 'Error deleting user: ' . $e->getMessage()], 500);
         }
         break;
-
+        
     default:
-        http_response_code(405);
-        echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+        sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         break;
 }
+?>

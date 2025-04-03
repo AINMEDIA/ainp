@@ -2,112 +2,214 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIN VISIBILITY MEDIA - Digital Marketing & PR Solutions</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#8B0000">
+    <meta name="description" content="[site_description]">
+    <meta name="keywords" content="digital marketing, PR, branding, social media, media solutions">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>[site_name] - Digital Marketing & PR Solutions</title>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
+    <link rel="manifest" href="images/icons/site.webmanifest">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Haronni&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icon-192x192.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/content-sync.js"></script>
+    <script src="js/settings-sync.js"></script>
+    <script src="js/test-settings.js"></script>
+    <script src="js/test-content.js"></script>
 </head>
 <body>
-    <div id="background">
-        <div class="page">
-            <div class="sidebar">
-                <div class="featured">
-                    <h3>Featured Services</h3>
-                    <a href="#branding" class="figure">
-                        <img src="images/branding.jpg" alt="Branding">
-                    </a>
-                    <span>Branding & Identity</span>
-                    <a href="#digital" class="figure">
-                        <img src="images/digital.jpg" alt="Digital Marketing">
-                    </a>
-                    <span>Digital Marketing</span>
-                    <a href="#pr" class="figure">
-                        <img src="images/pr.jpg" alt="Public Relations">
-                    </a>
-                    <span>Public Relations</span>
-                </div>
-                <div id="connect">
-                    <h2>Connect With Us</h2>
-                    <a href="#" class="facebook">Facebook</a>
-                    <a href="#" class="twitter">Twitter</a>
-                    <form>
-                        <input type="text" placeholder="Enter your email">
-                        <input type="submit" value="Subscribe" class="submit" title="Subscribe to newsletter">
-                    </form>
-                </div>
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <img src="images/ainmedia1.png" alt="[site_name]" class="site-logo">
             </div>
-            <div class="body">
-                <ul id="navigation">
-                    <li class="selected"><a href="home.html">Home</a></li>
+            <div class="menu-container">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="home.html" class="active">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="services.html">Services</a></li>
                     <li><a href="portfolio.html">Portfolio</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <form id="search">
-                    <input type="text" placeholder="Search">
-                    <input type="submit" value="Search" id="submit">
-                </form>
-                <h1>Welcome to AIN VISIBILITY MEDIA</h1>
-                <div class="hero-section">
-                    <video autoplay muted loop>
-                        <source src="videos/hero.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="videos/video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to [site_name]</h1>
+            <p class="hero-subtitle">Your Partner in Digital Excellence</p>
+            <a href="#services" class="hero-cta">Explore Our Services</a>
+        </div>
+        <div class="moving-text-container">
+            <div class="moving-text">FUTURISE...</div>
+            <div class="moving-text">FUTURISE...</div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>Digital Marketing</h3>
+                    <p>Strategic online marketing solutions including SEO, social media management, and content marketing to boost your online presence.</p>
                 </div>
-                <div class="services-section">
-                    <div class="service-card" id="branding">
-                        <h3>Branding & Identity</h3>
-                        <p>Create a strong and memorable brand identity that resonates with your target audience.</p>
-                    </div>
-                    <div class="service-card" id="digital">
-                        <h3>Digital Marketing</h3>
-                        <p>Reach your audience through strategic digital marketing campaigns.</p>
-                    </div>
-                    <div class="service-card" id="pr">
-                        <h3>Public Relations</h3>
-                        <p>Build and maintain a positive public image through effective PR strategies.</p>
-                    </div>
+                <div class="service-card">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>Public Relations</h3>
+                    <p>Professional PR services to manage your brand reputation, media relations, and crisis communication.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Branding</h3>
+                    <p>Comprehensive branding solutions including logo design, brand identity, and visual communication strategies.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analytics & Reporting</h3>
+                    <p>Data-driven insights and performance tracking to optimize your marketing campaigns and ROI.</p>
                 </div>
             </div>
         </div>
-    </div>
-    <footer>
+    </section>
+
+    <section class="portfolio">
+        <div class="container">
+            <h2>Our Work</h2>
+            <div class="portfolio-grid">
+                <!-- Portfolio items will be dynamically populated -->
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <div class="contact-info">
+                <p class="contact-address">123 Business Street, City, Country</p>
+                <p class="contact-phone">+256701521524</p>
+                <p class="contact-email">ainvisibilitymedia@gmail.com</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="connect-section parallax-section">
+        <div class="parallax" data-speed="0.3">
+            <img src="images/riverside-city.jpg" alt="Connect Background" class="parallax-image">
+        </div>
+        <div class="container parallax-content">
+            <div class="connect-grid">
+                <div class="connect-card fade-in">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/ainvisibilitymedia" target="_blank" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://twitter.com/ainvisibility" target="_blank" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="https://www.instagram.com/ainvisibilitymedia" target="_blank" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/ainvisibilitymedia-ain-visibility-media-6894a2332/" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                    </div>
+                    <form class="newsletter-form fade-in">
+                        <input type="email" placeholder="Enter your email">
+                        <button type="submit" class="submit">
+                            <i class="fas fa-paper-plane"></i>
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>AIN VISIBILITY MEDIA</h3>
-                <p>Your partner in digital success</p>
+                <h3 class="site-name">[site_name]</h3>
+                <p class="site-description">[site_description]</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="services.html">Services</a></li>
+                    <li><a href="portfolio.html">Portfolio</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Contact Info</h3>
-                <p>Email: info@ainvisibilitymedia.com</p>
-                <p>Phone: +1 234 567 890</p>
-                <p>Address: 123 Business Street, City, Country</p>
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/ainvisibilitymedia-ain-visibility-media-6894a2332/" target="_blank" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://www.instagram.com/ainvisibilitymedia" target="_blank" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://www.facebook.com/ainvisibilitymedia" target="_blank" class="social-link">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </a>
+                    <a href="https://twitter.com/ainvisibility" target="_blank" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                </div>
             </div>
             <div class="footer-section">
-                <h3>Follow Us</h3>
-                <div class="social-links">
-                    <a href="#" title="Follow us on Facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" title="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" title="Follow us on LinkedIn"><i class="fab fa-linkedin"></i></a>
-                </div>
+                <h3>Contact Info</h3>
+                <p class="site-address">[site_address]</p>
+                <p class="site-phone">[site_phone]</p>
+                <p class="site-email">[site_email]</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 AIN VISIBILITY MEDIA. All rights reserved.</p>
+            <p>&copy; 2025 <span class="site-name">[site_name]</span>. All rights reserved.</p>
         </div>
     </footer>
-    <script src="js/main.js"></script>
+
+    <script src="js/parallax.js"></script>
+    <script src="js/social.js"></script>
+    <script src="js/subscribe.js"></script>
+    <script src="js/smooth-scroll.js"></script>
 </body>
 </html>

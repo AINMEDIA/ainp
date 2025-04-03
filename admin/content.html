@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Content Management - AIN VISIBILITY MEDIA">
+    <title>Content Management - AIN VISIBILITY MEDIA</title>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="../images/icons/favicon.ico">
+    <link rel="manifest" href="../images/icons/site.webmanifest">
+    
+    <link rel="stylesheet" href="css/admin.css?v=1.0.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/camera.jpg" alt="AIN VISIBILITY MEDIA" class="logo">
+                <h2>AIN VISIBILITY MEDIA</h2>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="dashboard.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="users.html">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="content.html">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Content</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="media.html">
+                        <i class="fas fa-images"></i>
+                        <span>Media</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="handleLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search content...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-details">
+                        <span class="user-name">Welcome, Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                    <img src="images/admin-avatar.svg" alt="Admin Avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-wrapper">
+                <div class="welcome-section">
+                    <h1>Content Management</h1>
+                    <p>Manage your website content and pages.</p>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Content List</h2>
+                        <button class="btn-primary" onclick="showAddContentModal()">
+                            <i class="fas fa-plus"></i> Add New Content
+                        </button>
+                    </div>
+                    <div class="content-tabs">
+                        <button class="tab-btn active" onclick="switchTab('all')">All</button>
+                        <button class="tab-btn" onclick="switchTab('pages')">Pages</button>
+                        <button class="tab-btn" onclick="switchTab('posts')">Posts</button>
+                        <button class="tab-btn" onclick="switchTab('services')">Services</button>
+                    </div>
+                    <div class="content-grid" id="contentGrid">
+                        <!-- Content items will be dynamically populated here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Content Modal -->
+    <div id="addContentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Content</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="addContentForm" onsubmit="handleContentSubmit(event)">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="type">Content Type</label>
+                    <select id="type" name="type" required>
+                        <option value="page">Page</option>
+                        <option value="post">Post</option>
+                        <option value="service">Service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image">Featured Image</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Content</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script src="js/content.js"></script>
+    <script>
+        // Check if user is logged in
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html> 

@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         echo json_encode([
             'success' => true,
             'message' => 'File uploaded successfully',
-            'url' => 'uploads/' . $filename
+            'url' => 'admin/uploads/' . $filename
         ]);
     } else {
         http_response_code(500);

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix URLs Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background: #f2dede;
+            color: #a94442;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .debug-toggle {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .debug-info {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .setup-link, .check-link, .import-link {
+            display: block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+        }
+        .setup-link:hover, .check-link:hover, .import-link:hover {
+            text-decoration: underline;
+        }
+        .action-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .action-links a {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fix URLs Tool</h1>
+        <p>This tool will fix any issues with URLs in your portfolio and media items.</p>
+        
+        <button id="fixButton">Fix URLs</button>
+        
+        <div class="action-links">
+            <a href="../config/setup.php" class="setup-link" target="_blank">Run Database Setup (if needed)</a>
+            <a href="api/check-database.php" class="check-link" target="_blank">Check Database Contents</a>
+            <a href="api/import-files.php" class="import-link" target="_blank">Import Files from Uploads</a>
+        </div>
+        
+        <div id="result" class="result" style="display: none;"></div>
+        
+        <a href="#" class="debug-toggle" onclick="toggleDebug(); return false;">Show Debug Information</a>
+        <div id="debugInfo" class="debug-info">
+            <h3>If you're experiencing issues:</h3>
+            <ol>
+                <li>Make sure the database exists and is accessible</li>
+                <li>Verify that the portfolio and media tables exist</li>
+                <li>Check that the uploads directory exists and is writable</li>
+                <li>Check the PHP error log at: C:\xampp\php\logs\php_error.log</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function toggleDebug() {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.getElementById('fixButton').addEventListener('click', async function() {
+            const button = this;
+            const result = document.getElementById('result');
+            
+            // Disable button and show loading state
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span>Fixing URLs...';
+            
+            try {
+                const response = await fetch('/ainp/admin/api/fix-all-urls.php');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('Failed to parse JSON:', text);
+                    throw new Error('Invalid JSON response from server');
+                }
+                
+                result.style.display = 'block';
+                if (data.success) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <h3>Success!</h3>
+                        <p>${data.message}</p>
+                        ${data.fixed_items.length > 0 ? `
+                            <h4>Fixed Items:</h4>
+                            <ul>
+                                ${data.fixed_items.map(item => `
+                                    <li>${item.table || item.action}: ${item.old_url || item.source} → ${item.new_url || item.destination}</li>
+                                `).join('')}
+                            </ul>
+                        ` : ''}
+                        <p>If no items were fixed, it could mean:</p>
+                        <ol>
+                            <li>All URLs are already correct</li>
+                            <li>The database tables are empty</li>
+                            <li>There are no URL issues to fix</li>
+                        </ol>
+                        <p>Click <a href="api/check-database.php" target="_blank">Check Database Contents</a> to see what's in your database.</p>
+                        <p>If your database is empty, click <a href="api/import-files.php" target="_blank">Import Files from Uploads</a> to add your existing files to the database.</p>
+                    `;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <h3>Error</h3>
+                        <p>${data.message}</p>
+                        <p>Please check the debug information below for troubleshooting steps.</p>
+                    `;
+                }
+            } catch (error) {
+                result.style.display = 'block';
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>Error</h3>
+                    <p>${error.message}</p>
+                    <p>Please check the debug information below for troubleshooting steps.</p>
+                `;
+                console.error('Error:', error);
+            } finally {
+                // Reset button state
+                button.disabled = false;
+                button.textContent = 'Fix URLs';
+            }
+        });
+    </script>
+</body>
+</html> 
